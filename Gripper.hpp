@@ -1,15 +1,20 @@
-#ifndef USER_H
-#define USER_H
+#ifndef GRIPPER_HPP
+#define GRIPPER_HPP
 
-class User {
+class Gripper {
+
     public:
+        Gripper();
+
         int openGripper() const;
         int closeGripper() const;
         bool isGripperOpen() const;
-        int wasSuccesfulGrip() const;
+        bool wasSuccesfulGrip() const;
+    
     private:
-        int currentPWM;
+        int currentStep;
+        bool isClosed;
+        bool isActivelyHolding;
 };
-
 
 #endif

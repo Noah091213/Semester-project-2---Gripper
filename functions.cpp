@@ -2,14 +2,14 @@
 #include <iostream>
 
 // Define a pin as input
-void setPinInput(int name*) {
+void setPinInput(int* name) {
     int gpioTest = 0;
     gpioTest = gpioSetMode(name, PI_INPUT);
     runTest(gpioTest);
 }
 
 // Define a pin as output
-void setPinOutput(int name*) {
+void setPinOutput(int* name) {
     int gpioTest = gpioSetMode(name, PI_OUTPUT);
     runTest(gpioTest);
 }
@@ -20,3 +20,4 @@ void runTest(int toTest) {
         std::cout << "ERROR" << toTest << std::endl;
     }
 }
+
