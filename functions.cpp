@@ -6,6 +6,8 @@
 void runTest(int toTest) {
     if (toTest == PI_INIT_FAILED) {
         std::cout << "ERROR" << toTest << std::endl;
+    } else {
+        std::cout << "Pin passed test" << std::endl;
     }
 }
 

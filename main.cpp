@@ -8,28 +8,16 @@
 
 int main() 
 {
-    // Define input and output pins
-    static unsigned int ButtonClose = 0;    // Button for detecting if the gripper closed on something
-    static unsigned int ButtonZero  = 0;    // Button for zeroing/opening the gripper
-    static unsigned int OutOFF      = 0;    // Output to disable the H bridge
-    static unsigned int OutForward  = 12;    // Output to turn H bridge/motor forward
-    static unsigned int OutBackward = 13;    // Output to turn H bridge/motor in reverse
-    
-    std::cout << "Initializing GPIO pins" << std::endl;
+    std::cout << "Initializing GPIO library" << std::endl;
     int test = gpioInitialise();
     runTest(test);
 
-    std::cout << "Initializing In/Out pins" << std::endl;
-    setPinInput(ButtonClose);
-    setPinInput(ButtonZero);
-    setPinOutput(OutOFF);
-    setPinOutput(OutForward);
-    setPinOutput(OutBackward);
-
     int currentCase = 1;   // Int used to control state machine for testing
-    int userInput = 0;      // Input for calling commands for testing, only call ints
-    
-    Gripper mainGripper;
+    int userInput   = 0;   // Input for calling commands for testing, only call ints
+
+    Gripper mainGripper(12, 13, 26, 1, 0);
+
+    mainGripper.pinInit();
 
     while (true) {
         switch(currentCase) {
@@ -37,18 +25,21 @@ int main()
             case 1: // Default case
 
                 std::cout << "Case 1\n" << std::endl;
+                
                 // Sets all the pins to default
-                gpioWrite(OutOFF, PI_ON);
-                gpioWrite(OutForward, PI_OFF);
-                gpioWrite(OutBackward, PI_OFF);
+                mainGripper.setOffPinState(1);
+                mainGripper.setForwardPinState(0);
+                mainGripper.setBackwardPinState(0);
 
                 std::cout << " Type 1 to close gripper \n Type 2 to open gripper \n Type 3 to get the current status \n " << std::endl;
                 std::cin >> userInput;
 
                 if (userInput == 1) {       // Calls command to close the gripper
+                    mainGripper.closeGripper();
                     currentCase = 2;
 
                 } else if (userInput == 2) {// Calls command to open gripper
+                    mainGripper.openGripper();
                     currentCase = 3;
 
                 } else if (userInput == 3) { 
