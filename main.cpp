@@ -16,7 +16,8 @@ int main()
     static unsigned int OutBackward = 13;    // Output to turn H bridge/motor in reverse
     
     std::cout << "Initializing GPIO pins" << std::endl;
-    runTest(gpioInitialise());
+    int test = gpioInitialise();
+    runTest(test);
 
     std::cout << "Initializing In/Out pins" << std::endl;
     setPinInput(ButtonClose);
@@ -28,6 +29,8 @@ int main()
     int currentCase = 1;   // Int used to control state machine for testing
     int userInput = 0;      // Input for calling commands for testing, only call ints
     
+    Gripper mainGripper;
+
     while (true) {
         switch(currentCase) {
 
@@ -48,6 +51,9 @@ int main()
                 } else if (userInput == 2) {// Calls command to open gripper
                     currentCase = 3;
 
+                } else if (userInput == 3) { 
+                    currentCase = 4;
+
                 } else {
                     std::cout << "Please enter a valid option.\n\n" << std::endl;
                 }
@@ -66,10 +72,10 @@ int main()
 
             case 4: // Get the current state of the grippers success
                 
-                if (Gripper.wasSuccesful() == 1) {
-                    std::cout << "The gripper is holding something" std::endl;
+                if (mainGripper.wasSuccesfulGrip() == 1) {
+                    std::cout << "The gripper is holding something" << std::endl;
                 } else {
-                    std::cout << "The gripper is not holding something" std::endl;
+                    std::cout << "The gripper is not holding something" << std::endl;
                 }
                 
                 currentCase = 1;
