@@ -15,7 +15,7 @@ int main()
     int currentCase = 1;   // Int used to control state machine for testing
     int userInput   = 0;   // Input for calling commands for testing, only call ints
 
-    Gripper mainGripper(12, 13, 26, 1, 0);
+    Gripper mainGripper(13, 12, 26, 0, 1);
 
     mainGripper.pinInit();
 

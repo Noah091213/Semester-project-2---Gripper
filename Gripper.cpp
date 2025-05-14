@@ -19,7 +19,9 @@ Gripper::Gripper(unsigned int forward, unsigned int backward, unsigned int off, 
     outBackward = backward;   // Output to turn H bridge/motor in reverse
 }
 
+
 // Methods:
+
 
 void Gripper::pinInit() {
 
@@ -31,30 +33,45 @@ void Gripper::pinInit() {
     setPinOutput(outBackward);
 }
 
+
+
 void Gripper::openGripper() {
+
+    std::cout << "Opening gripper" << std::endl;
+
     gpioWrite(outOFF, PI_OFF);
     gpioWrite(outForward, PI_OFF);
-    gpioWrite(outBackward, PI_ON);
+    gpioPWM(outBackward, 100);
+    //gpioWrite(outBackward, PI_ON);
 
     std::cout << "Steps are "<< currentStep << std::endl;
     currentStep += 300;
 
-    while (/*buttonZero == 0 &&*/ currentStep >= 0) {
+    std::cout << "Button zero is currently " << gpioRead(buttonClose) << std::endl;
+
+    while (gpioRead(buttonZero) == 0 && currentStep >= 0) {
         std::cout << "Opening "<< currentStep << std::endl;
         currentStep--;
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
     currentStep = 0;
-    std::cout << "Zero achieved!"<< currentStep << std::endl;
+    std::cout << "Zero achieved! Current step is: "<< currentStep << std::endl;
 }
+
+
 
 void Gripper::closeGripper() {
     
+    std::cout << "Closing gripper" << std::endl;
+
     gpioWrite(outOFF, PI_OFF);
-    gpioWrite(outForward, PI_ON);
+    gpioPWM(outForward, 100);
+    //gpioWrite(outForward, PI_ON);
     gpioWrite(outBackward, PI_OFF);
 
-    while (buttonClose == 0 && currentStep <= 200) {
+    std::cout << "Button close is currently " << gpioRead(buttonClose) << std::endl;
+
+    while (gpioRead(buttonClose) == 0 && currentStep <= 200) {
         std::cout << "Closing "<< currentStep << std::endl;
         currentStep++;
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -63,12 +80,14 @@ void Gripper::closeGripper() {
     gpioWrite(outForward, PI_OFF);
     gpioWrite(outOFF, PI_ON);
 
-    if (currentStep >= 1700) {
+    if (currentStep >= 170) {
         isActivelyHolding = true;
     } else {
         isActivelyHolding = false;
     }
 }
+
+
 
 bool Gripper::isGripperOpen() const {
     return isClosed;
