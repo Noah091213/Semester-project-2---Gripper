@@ -26,24 +26,35 @@ Instructions for downloading the library can be found here https://abyz.me.uk/rp
 
 ### Installation
 
-Step-by-step guide on how to install and run the project.
+Step-by-step guide on how to install and run the project. If changes need to be made and pushed to github use the SSH key instead
 
 ```bash
-# Example command
+# Example to download
 git clone https://github.com/Noah091213/Semester-project-2---Gripper
 mkdir build
 cd build
-cmake
+cmake ..
 make
 # Profit!
+```
+```bash
+# Example to download and run
+git clone git@github.com:Noah091213/Semester-project-2---Gripper.git
+mkdir build
+cd build
+cmake ..
+make
+# Profit with extra steps!
 ```
 
 ## Usage
 
-Explain how to use the project. Include examples if possible.
+To run the program use the following:
 
 ```bash
-# Example usage
-./pinoutTestProgram1
+# To run the program
+cd build
+sudo ./uv5Gripper
+# Using sudo is very important as the Pi needs access to the GPIO pins for the program to run
 ```
 
