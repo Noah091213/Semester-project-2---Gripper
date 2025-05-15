@@ -1,5 +1,6 @@
 #ifndef FUNCTIONS_HPP
 #define FUNCTIONS_HPP
+#include <sqlite3.h>
 
 void setPinInput(unsigned int name);    // Function to set up an input GPIO pin
 void setPinOutput(unsigned int name);   // Function to set up an output GPIO pin
