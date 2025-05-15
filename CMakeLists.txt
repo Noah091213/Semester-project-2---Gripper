@@ -8,4 +8,4 @@ link_directories(/usr/lib)
 
 add_executable(uv5Gripper functions.cpp functions.hpp Gripper.cpp Gripper.hpp main.cpp sqlite3.c)
 target_link_libraries(uv5Gripper PUBLIC pigpio)
-target_link_libraries(uv5Gripper sqlite3)
+target_link_libraries(uv5Gripper PUBLIC sqlite3)
