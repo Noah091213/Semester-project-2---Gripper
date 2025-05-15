@@ -3,5 +3,9 @@ cmake_minimum_required(VERSION 3.25 FATAL_ERROR)
 project(uv5Gripper)
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(uv5Gripper functions.cpp functions.hpp Gripper.cpp Gripper.hpp main.cpp)
+include_directories(/usr/include)
+link_directories(/usr/lib)
+target_link_libraries(uv5Gripper sqlite3)
+
+add_executable(uv5Gripper functions.cpp functions.hpp Gripper.cpp Gripper.hpp main.cpp sqlite3.c)
 target_link_libraries(uv5Gripper PUBLIC pigpio)
