@@ -9,7 +9,7 @@ void runTest(int toTest);               // Function to test pins due to the lack
 int displayData(void *placeholder, int totalColumns, char **values, char **columnName); //Internal function to display the data. Used internally in displayTable.
 void openDatabase();                                                                    //Opens the database.
 void createTable();                                                                     //Creates a table if it does not already exist.
-void insertData(bool succesfullGrip)                                                    //Inserts data into table.
+void insertData(bool succesfullGrip);                                                    //Inserts data into table.
 void displayTable();                                                                    //Displayes the table.
 void closeDatabase();                                                                   //Closes the database.
 
