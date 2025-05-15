@@ -1,5 +1,6 @@
 #include <pigpio.h>
 #include <iostream>
+#include <functions.hpp>
 
 
 // Check if pigpio errors occur, must be used because runtime errors have no checks in library
