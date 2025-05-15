@@ -15,14 +15,14 @@ void runTest(int toTest) {
 void setPinInput(unsigned int name) {
     int gpioTest = 0;
     gpioTest = gpioSetMode(name, PI_INPUT);
-    runTest(gpioTest);
+    runTest(gpioTest);  // Checking if the pin was set up correctly
 }
 
 // Define a pin as output
 void setPinOutput(unsigned int name) {
     int gpioTest = 0;
     gpioTest = gpioSetMode(name, PI_OUTPUT);
-    runTest(gpioTest);
+    runTest(gpioTest);  // Checking if the pin was set up correctly
 }
 
 
