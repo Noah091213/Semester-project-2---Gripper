@@ -29,7 +29,7 @@ Instructions for downloading the library can be found here https://abyz.me.uk/rp
 Step-by-step guide on how to install and run the project. If changes need to be made and pushed to github use the SSH key instead
 
 ```bash
-# Example to download
+# Example to only download
 git clone https://github.com/Noah091213/Semester-project-2---Gripper
 mkdir build
 cd build
@@ -38,7 +38,7 @@ make
 # Profit!
 ```
 ```bash
-# Example to download and run
+# Example to download and be able to upload later
 git clone git@github.com:Noah091213/Semester-project-2---Gripper.git
 mkdir build
 cd build
