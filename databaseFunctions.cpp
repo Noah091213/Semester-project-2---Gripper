@@ -19,15 +19,7 @@ sqlite3 *gripperDatabase;
 	//4. displayData()
 	//5. closeDatabase()
 	
-//7. Compilation with cmake: Example of a CMakeLists.txt file that can handle a sqlite3 db on raspberry pi.
-	//cmake_minimum_required(VERSION 3.5)
-	//project(ProjectTest LANGUAGES CXX)
-	//set(CMAKE_CXX_STANDARD 17)
-	//set(CMAKE_CXX_STANDARD_REQUIRED ON)
-	//include_directories(/usr/include)
-	//link_directories(/usr/lib)
-	//target_link_libraries(ProjectTest sqlite3)
-	//add_executable(ProjectTest databaseFunctions.cpp sqlite3.c) 	
+//7. Compilation with cmake.
 
 //Internal function to display the data. Used internally in displayTable.
 int displayData(void *placeholder, int totalColumns, char **values, char **columnName)
@@ -55,7 +47,7 @@ int displayData(void *placeholder, int totalColumns, char **values, char **colum
 void openDatabase()
 {	
 	//Attempts to open the database. "sqlite3_open()" returns 0 when successful and other values when not successful.
-	int error = sqlite3_open("gripperdata.db", &gripperDatabase);
+	int error = sqlite3_open("../gripperdata.db", &gripperDatabase);
 	
 	//When the database cannot be opened an error gets printed.
 	if(error)
