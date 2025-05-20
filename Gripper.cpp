@@ -43,11 +43,6 @@ void Gripper::openGripper() {
     gpioWrite(outOFF, PI_OFF);      // Set disable pin to low, allowing control through H-bridge
     gpioWrite(outForward, PI_OFF);  // Sets forward pin to low, opening needs to go backwards
     gpioPWM(outBackward, 100);      // PWM signal to drive motor at slower speed, "100" is subject to change when calibrating
-    //gpioWrite(outBackward, PI_ON);  // Backward signal simply set to high, is only used if PWM does not work
-
-    /*gpioWrite(outBackward, PI_ON);
-    gpioWrite(outForward, PI_OFF);
-    gpioPWM(outOFF, 100);*/
 
     std::cout << "Steps are "<< currentStep << std::endl;   
     currentStep += 300; // To make sure the gripper is zeroed we add a lot of steps, to keep it running until it hits the button
@@ -78,12 +73,7 @@ void Gripper::closeGripper() {  // Method to close the gripper
     
     gpioWrite(outOFF, PI_OFF);      // Set disable pin to low, allowing control through H-bridge
     gpioPWM(outForward, 100);       // PWM signal to drive motor at slower speed, "100" is subject to change when calibrating
-    //gpioWrite(outForward, PI_ON);   // Forward signal simply set to high, is only used if PWM does not work
     gpioWrite(outBackward, PI_OFF); // Sets backward pin to low, closing needs to go forwards 
-
-    /*gpioWrite(outBackward, PI_OFF);
-    gpioWrite(outForward, PI_ON);
-    gpioPWM(outOFF, 100);*/
 
     std::cout << "Button close is currently " << gpioRead(buttonClose) << std::endl;    // Debug print
 
