@@ -54,6 +54,13 @@ void Gripper::openGripper() {
         currentStep--;                                              // For every loop we subtract one from steps to keep count
         std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Sleep for 10 miliseconds, this allows the program to acount steps roughly every 10 miliseconds, may change if motor drives too fast
     }
+
+    if (gpioRead(buttonZero == 1)) {
+        std::cout << "Button zero is pressed" << std::endl;
+    } else {
+        std::cout << "closed without button pressed" << std::endl;
+    }
+
     currentStep = 0;    // Because the button should now have been pressed, reset currentStep to zero
     std::cout << "Zero achieved! Current step is: "<< currentStep << std::endl;
 
@@ -81,6 +88,12 @@ void Gripper::closeGripper() {  // Method to close the gripper
         std::cout << "Closing "<< currentStep << std::endl;         // Debug print
         currentStep++;                                              // Add a step for every loop to keep track of location
         std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Sleep for 10 miliseconds, this allows the program to acount steps roughly every 10 miliseconds, may change if motor drives too fast
+    }
+
+    if (gpioRead(buttonClose == 1)) {
+        std::cout << "Button close is pressed" << std::endl;
+    } else {
+        std::cout << "closed without button pressed" << std::endl;
     }
 
     isClosed = true;    // Set the gripper to be closed if checked
