@@ -44,7 +44,7 @@ void Gripper::openGripper() {
 
     gpioWrite(outOFF, PI_OFF);      // Set disable pin to low, allowing control through H-bridge
     gpioWrite(outForward, PI_OFF);  // Sets forward pin to low, opening needs to go backwards
-    gpioWrite(outBackward, PI_ON);      // PWM signal to drive motor at slower speed, "100" is subject to change when calibrating
+    gpioWrite(outBackward, PI_ON);  // Sets backward pin to high, to open the gripper
 
     std::cout << "Steps are "<< currentStep << std::endl;   
     currentStep += 300; // To make sure the gripper is zeroed we add a lot of steps, to keep it running until it hits the button
@@ -54,13 +54,7 @@ void Gripper::openGripper() {
     while (gpioRead(buttonZero) == 0 && currentStep >= 0) {         // Keep driving the motor until the button is pressed or it has been running for longer than it should need and steps have reached 0
         std::cout << "Opening "<< currentStep << std::endl;         // Debug print
         currentStep--;                                              // For every loop we subtract one from steps to keep count
-        std::this_thread::sleep_for(std::chrono::milliseconds(5)); // Sleep for 10 miliseconds, this allows the program to acount steps roughly every 10 miliseconds, may change if motor drives too fast
-    }
-
-    if (gpioRead(buttonZero == 1)) {
-        std::cout << "Button zero is pressed" << std::endl;
-    } else {
-        std::cout << "closed without button pressed" << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(5)); // Sleep for 5 miliseconds, this allows the program to acount steps roughly every 10 miliseconds, may change if motor drives too fast
     }
 
     currentStep = 0;    // Because the button should now have been pressed, reset currentStep to zero
@@ -70,7 +64,6 @@ void Gripper::openGripper() {
 
     //gpioWrite(outOFF, PI_ON);       // Disable the H-bridge
     gpioWrite(outBackward, PI_OFF); // Disable the backwards movement
-
 }
 
 
@@ -79,12 +72,12 @@ void Gripper::closeGripper() {  // Method to close the gripper
     
     std::cout << "Closing gripper" << std::endl;    // Debug print
 
-    gpioWrite(outOFF, PI_ON);
+    gpioWrite(outOFF, PI_ON);   
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
 
     gpioWrite(outOFF, PI_OFF);      // Set disable pin to low, allowing control through H-bridge
-    gpioWrite(outForward, PI_ON);       // PWM signal to drive motor at slower speed, "100" is subject to change when calibrating
+    gpioWrite(outForward, PI_ON);   // Sets forward pin to high, to close the gripper
     gpioWrite(outBackward, PI_OFF); // Sets backward pin to low, closing needs to go forwards 
 
     std::cout << "Button close is currently " << gpioRead(buttonClose) << std::endl;    // Debug print
@@ -92,21 +85,21 @@ void Gripper::closeGripper() {  // Method to close the gripper
     while (gpioRead(buttonClose) == 0 && currentStep <= 160) {      // Keep running until the button hits something, or steps reach a point where the gripper is fully closed. The steps here need to be calibrated with PWM signal
         std::cout << "Closing "<< currentStep << std::endl;         // Debug print
         currentStep++;                                              // Add a step for every loop to keep track of location
-        std::this_thread::sleep_for(std::chrono::milliseconds(5)); // Sleep for 10 miliseconds, this allows the program to acount steps roughly every 10 miliseconds, may change if motor drives too fast
+        std::this_thread::sleep_for(std::chrono::milliseconds(5)); // Sleep for 5 miliseconds, this allows the program to acount steps roughly every 10 miliseconds, may change if motor drives too fast
     }
 
-    if (gpioRead(buttonClose == 1)) {
-        std::cout << "Button close is pressed" << std::endl;
+    if (gpioRead(buttonClose) == 1) {
+        std::cout << "Closed with button pressed" << std::endl;
     } else {
-        std::cout << "closed without button pressed" << std::endl;
+        std::cout << "Closed without button pressed" << std::endl;
+        gpioWrite(outOFF, PI_ON);
+        gpioWrite(outBackward, PI_OFF);
     }
 
     isClosed = true;    // Set the gripper to be closed if checked
 
     gpioWrite(outForward, PI_OFF);  // Disable the forward move
-    //(outOFF, PI_ON);       // Disable the H-bridge
-
-    if (currentStep <= 140) {       // If the gripper managed to take more than 100 steps (subject to change) the gripper managed to close past where an object would realistically be, thus set isActivelyHolding to true
+    if (currentStep <= 140) {       // If the gripper managed to take more than 140 steps (subject to change) the gripper managed to close past where an object would realistically be, thus set isActivelyHolding to true
         isActivelyHolding = true;
     } else {                        // Else the gripper closed past and didnt grab anything
         isActivelyHolding = false;

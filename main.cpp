@@ -154,7 +154,7 @@ int main() // Main loop for the whole program
                 std::cout << "Case 1\n" << std::endl;   // Print for debugging and to show where in the code the program currently is
                 
                 // Sets all the pins to default
-                mainGripper.setOffPinState(0);
+                //mainGripper.setOffPinState(0);
                 mainGripper.setForwardPinState(0);
                 mainGripper.setBackwardPinState(0);
 
@@ -169,8 +169,8 @@ int main() // Main loop for the whole program
 
                 } else if (userInput == 3) { 
                     currentCase = 4;
-		} else if (userInput == 4) {
-		    currentCase = 5;
+				} else if (userInput == 4) {
+					currentCase = 5;
                 } else {
                     std::cout << "Please enter a valid option.\n\n" << std::endl;   // If input does not match an option, this will catch it and not throw an error
                 }
