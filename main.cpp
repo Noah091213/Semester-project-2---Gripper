@@ -1,3 +1,4 @@
+
 #include <pigpio.h>
 #include <modbus/modbus.h>
 #include <iostream>
@@ -141,7 +142,7 @@ int main() // Main loop for the whole program
     int currentCase = 1;        // Int used to control state machine for testing
     int userInput   = 0;        // Input for calling commands for testing, only call ints
 
-    Gripper mainGripper(12, 13, 26, 0, 1);  // Creating an instance of the gripper class, the first 2 numbers are back and forward, 3rd pin is diable and the last 2 are for buttons
+    Gripper mainGripper(17, 27, 26, 16, 20);  // Creating an instance of the gripper class, the first 2 numbers are back and forward, 3rd pin is diable and the last 2 are for buttons
 
     mainGripper.pinInit();      // Method does all the necessary setup for the pins to make sure they work
 
@@ -153,7 +154,7 @@ int main() // Main loop for the whole program
                 std::cout << "Case 1\n" << std::endl;   // Print for debugging and to show where in the code the program currently is
                 
                 // Sets all the pins to default
-                mainGripper.setOffPinState(1);
+                mainGripper.setOffPinState(0);
                 mainGripper.setForwardPinState(0);
                 mainGripper.setBackwardPinState(0);
 
