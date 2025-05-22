@@ -266,6 +266,12 @@ int main() // Main loop for the whole program
 						// Simulate gripper operation
 						//sleep(2);  // Gripper action...
 						mainGripper.closeGripper();
+
+						// Database push
+						createTable();
+	                	insertData(mainGripper.wasSuccesfulGrip);
+                    	displayTable();
+
 						// Acknowledge by setting register 133 = 1
 						rc = modbus_write_register(ctx, 133, 1);
 						if (rc == -1) {
