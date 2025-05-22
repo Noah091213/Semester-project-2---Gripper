@@ -10,7 +10,7 @@
 
 Gripper::Gripper(unsigned int forward, unsigned int backward, unsigned int off, unsigned int buttonZ, unsigned int buttonC) {
     currentStep = 0;          // Variable used to meassure how closed the gripper is. 0 is all the way open and pressing the zero button
-    isClosed = 0;             // Var to check if the gripper is currently closed
+    isOpen = 0;             // Var to check if the gripper is currently closed
 
     buttonClose = buttonC;    // Button for detecting if the gripper closed on something
     buttonZero  = buttonZ;    // Button for zeroing/opening the gripper
@@ -21,7 +21,6 @@ Gripper::Gripper(unsigned int forward, unsigned int backward, unsigned int off, 
 
 
 // Methods:
-
 
 void Gripper::pinInit() {   // Method to init all pins together, this is done through a method to encapsulate all aspects of the gripper in the class
 
@@ -109,7 +108,7 @@ void Gripper::closeGripper() {  // Method to close the gripper
 
 
 bool Gripper::isGripperOpen() const {   // Getter for current status of the gripper
-    return isClosed;
+    return isOpen;
 }
 
 bool Gripper::wasSuccesfulGrip() const {// Getter for whether or not the gripper is holding something

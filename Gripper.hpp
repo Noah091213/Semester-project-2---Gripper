@@ -19,7 +19,7 @@ class Gripper {
 
     private:
         int currentStep;            // Step counter to keep track of the gripper and how closed it is
-        bool isClosed;              // Bool is true if the gripper is closed
+        bool isOpen;              // Bool is true if the gripper is closed
         bool isActivelyHolding;     // Bool is true if the gripper is holdingh something
 
         unsigned int buttonClose;   // Button for detecting if the gripper closed on something
