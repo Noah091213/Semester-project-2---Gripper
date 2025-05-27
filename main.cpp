@@ -124,7 +124,6 @@ void closeDatabase()
 }
 
 modbus_t *ctx;			//Initialize modbus module variables
-modbus_mapping_t *mb_mapping;	//Initialize modbus module mapping
 
 int main() // Main loop for the whole program
 {
@@ -212,9 +211,9 @@ int main() // Main loop for the whole program
 		
         	case 5: //Start active listening of modbus commands
 				//Modbus connection to the UR robot
-				modbus_t* ctx = modbus_new_tcp("192.168.0.100", 502);  // IP of your UR robot
+				modbus_t* ctx = modbus_new_tcp("192.168.0.100", 502);  // IP of UR robot
 				if (ctx == nullptr) {
-				std::cerr << "Unable to allocate libmodbus context\n";
+				std::cerr << "Unable to allocate libmodbus context\n"; //Error messages for debugging
 				break;
 				}
 				
@@ -232,10 +231,10 @@ int main() // Main loop for the whole program
 				while (true) {
 					rc = modbus_read_registers(ctx, 130, 5, values); // only need register 130
 					if (rc == -1) {
-						std::cerr << "Read failed: " << modbus_strerror(errno) << "\n";
+						std::cerr << "Read failed: " << modbus_strerror(errno) << "\n"; //Error messages for debugging
 						break;
 					}
-
+					//Section that adds additional debugging, if previous value is set to = true
 					if(addDebugging){
 						std::cout << "-------------------------------------"<< "\n";
 						std::cout << "Register 130 = " << values[0] << "\n";
@@ -244,7 +243,8 @@ int main() // Main loop for the whole program
 						std::cout << "Register 133 = " << values[3] << "\n";
 						std::cout << "Register 134 = " << values[4] << "\n";
 					}
-					
+
+					//This 'if' statements continiously checks if the RESET_VALUE registry is set to true, that way the gripper can be set at a default.
 					if ((values[1] == 1 && values[4] == 1) || (values[3] == 1 && values[4] == 1)) {
 						rc = modbus_write_register(ctx, 131, 0); //Reset open gripper
 						rc = modbus_write_register(ctx, 133, 0); //reset close gripper
@@ -253,9 +253,10 @@ int main() // Main loop for the whole program
 					}
 
 					//Close Gripper code:
-					if (values[2] == 1) {
+					if (values[2] == 1) {	//Checks registry "closeGripper"
 						std::cout << "-------------------------------------"<< "\n";
-						std::cout << "Massa tells us to close da grippar\n";
+						std::cout << "Registry signals to close the gripper \n";
+						//Section that adds additional debugging, if previous value is set to = true
 						if(addDebugging){
 						std::cout << "Register 130 = " << values[0] << "\n";
 						std::cout << "Register 131 = " << values[1] << "\n";
@@ -263,8 +264,7 @@ int main() // Main loop for the whole program
 						std::cout << "Register 133 = " << values[3] << "\n";
 						std::cout << "Register 134 = " << values[4] << "\n";
 						}
-						// Simulate gripper operation
-						//sleep(2);  // Gripper action...
+						//Closing gripper
 						mainGripper.closeGripper();
 
 						// Database push
@@ -272,14 +272,14 @@ int main() // Main loop for the whole program
 	                	insertData(mainGripper.wasSuccesfulGrip);
                     	displayTable();
 
-						// Acknowledge by setting register 133 = 1
+						// Set finishing status to the UR robot by setting register 133 = 1
 						rc = modbus_write_register(ctx, 133, 1);
 						if (rc == -1) {
-							std::cerr << "Failed to write 1 to register 133: " << modbus_strerror(errno) << "\n";
+							std::cerr << "Failed to write 1 to register 133: " << modbus_strerror(errno) << "\n";  //Error messages for debugging
 						} else {
 							std::cout << "-------------------------------------"<< "\n";
-							std::cout << "Successfully Close for Massa and asks for more work\n";
-						
+							std::cout << "Successfully Closed and waits for more registry changes\n";
+							//Section that adds additional debugging, if previous value is set to = true
 							if(addDebugging){
 								std::cout << "Register 130 = " << values[0] << "\n";
 								std::cout << "Register 131 = " << values[1] << "\n";
@@ -290,9 +290,10 @@ int main() // Main loop for the whole program
 						}
 					}        
 					//open gripper code
-					if (values[0] == 1) {
+					if (values[0] == 1) {	//Checks Registry "openGripper" if true
 						std::cout << "-------------------------------------"<< "\n";
-						std::cout << "Massa tells us to open da grippar\n";
+						std::cout << "Registry signals to open gripper\n";
+						//Section that adds additional debugging, if previous value is set to = true
 						if(addDebugging){
 							std::cout << "Register 130 = " << values[0] << "\n";
 							std::cout << "Register 131 = " << values[1] << "\n";
@@ -300,16 +301,15 @@ int main() // Main loop for the whole program
 							std::cout << "Register 133 = " << values[3] << "\n";
 							std::cout << "Register 134 = " << values[4] << "\n";
 						}
-						// Simulate gripper operation
-						//sleep(2);  // Gripper action...
-					mainGripper.openGripper();
-						// Acknowledge by setting register 131 = 1
+						//Opening Gripper
+						mainGripper.openGripper();
+						// Set finishing status to the UR robot by setting register 131 = 1
 						rc = modbus_write_register(ctx, 131, 1);
 						if (rc == -1) {
-							std::cerr << "Failed to write 1 to register 131: " << modbus_strerror(errno) << "\n";
+							std::cerr << "Failed to write 1 to register 131: " << modbus_strerror(errno) << "\n";  //Error messages for debugging
 						} else {
 							std::cout << "-------------------------------------"<< "\n";
-							std::cout << "Successfully Open for Massa and asks for more work\n";
+							std::cout << "Successfully Opened and waits for more Registry changes\n";
 						if(addDebugging){
 							std::cout << "Register 130 = " << values[0] << "\n";
 							std::cout << "Register 131 = " << values[1] << "\n";
@@ -323,14 +323,6 @@ int main() // Main loop for the whole program
 				}
 
 				break;
-
-			//Update debugging setting
-			/*case 6:	
-			
-				addDebugging = !addDebugging;
-				modbus_set_debug(ctx, addDebugging);
-				std::cout << "Debugging is now: " << addDebugging << "\n";
-			break;*/
 				
 		}
     }
